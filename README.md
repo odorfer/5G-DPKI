@@ -11,7 +11,9 @@ Please follow the steps below to start the proof of concept:
 ## 1. Start the Hyperledger Indy ledger:
 
 Execute the following command in your terminal:
+```
 ./hyperledger_indy/von-network/manage start --logs
+```
 
 Wait till Hyperledger Indy is ready. Note: This may take a few minutes. Please wait until the log says: "... Finished resync"
 
