@@ -58,9 +58,9 @@ docker-compose down
 ```
 ## 4. Wait for the AMF to start the 5G SBA example scenario
 
-The AMF will automatically after 10 seconds initiate a request to the UDM.
+The AMF automatically initiates a request to the UDM after 10 seconds.
 
-Das Szenario war erfolgreich sofern im Terminal Fenster von Docker Compose unter den Logs der AMF die folgende Nachricht erscheint:
+The scenario was successful if the following message appears in the Docker Compose terminal window under the AMF logs:
 
 Response from UDM:
 
