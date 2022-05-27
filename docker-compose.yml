@@ -1,0 +1,67 @@
+version: "3.9"
+services:
+  udm_agent:
+    image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.1
+    ports:
+      - "11001:11001"
+    network_mode: host
+    command: "start --label udm -it http 0.0.0.0 8001 -ot http --admin 0.0.0.0 11001 --admin-insecure-mode --genesis-url http://localhost:9000/genesis --seed udm00000000000000000000000000000 --endpoint http://localhost:8001/ --debug-connections --auto-provision --wallet-type indy --wallet-name udm --wallet-key secret  --webhook-url http://localhost:4001/webhooks --public-invites --auto-accept-requests"
+  udm_controller:
+    build: ./udm_controller/
+    ports:
+      - "4001:4001"
+    depends_on:
+      - "udm_agent"
+    network_mode: host
+  udm:
+    build: ./udm/
+    ports:
+      - "3001:3001"
+    depends_on:
+      - "udm_controller"
+    network_mode: host
+
+  nrf_agent:
+    image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.1
+    ports:
+      - "11002:11002"
+    network_mode: host
+    command: "start --label nrf -it http 0.0.0.0 8002 -ot http --admin 0.0.0.0 11002 --admin-insecure-mode --genesis-url http://localhost:9000/genesis --seed nrf00000000000000000000000000000 --endpoint http://localhost:8002/ --debug-connections --auto-provision --wallet-type indy --wallet-name nrf --wallet-key secret  --webhook-url http://localhost:4002/webhooks --public-invites --auto-accept-requests"
+  nrf_controller:
+    build: ./nrf_controller/
+    ports:
+      - "4002:4002"
+    depends_on:
+      - "nrf_agent"
+    network_mode: host
+  nrf:
+    build: ./nrf/
+    ports:
+      - "3002:3002"
+    depends_on:
+      - "nrf_controller"
+    network_mode: host
+  
+
+  amf_agent:
+    image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.1
+    ports:
+      - "11000:11000"
+    network_mode: host
+    depends_on:
+      - "nrf"
+    command: "start --label amf -it http 0.0.0.0 8000 -ot http --admin 0.0.0.0 11000 --admin-insecure-mode --genesis-url http://localhost:9000/genesis --seed amf00000000000000000000000000000 --endpoint http://localhost:8000/ --debug-connections --auto-provision --wallet-type indy --wallet-name amf --wallet-key secret  --webhook-url http://localhost:4000/webhooks --public-invites --auto-accept-requests"  
+  amf_controller:
+    build: ./amf_controller/
+    ports:
+      - "4000:4000"
+    depends_on:
+      - "amf_agent"
+    network_mode: host
+  amf:
+    build: ./amf/
+    ports:
+      - "3000:3000"
+    depends_on:
+      - "amf_controller"
+    network_mode: host
